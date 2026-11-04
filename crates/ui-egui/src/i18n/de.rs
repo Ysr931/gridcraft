@@ -4,6 +4,19 @@
 /// Returns the German translation for `text`, or `None` so callers fall back to English.
 pub(super) fn translate(text: &str) -> Option<&'static str> {
     Some(match text {
+        // Eigene Ergänzung: Nachfrage vor dem Ersetzen einer von außen geänderten Datei.
+        "File Changed" => "Datei geändert",
+        "{name} has changed in the meantime" => "„{name}“ wurde inzwischen geändert",
+        "The file was changed from outside since you opened or last saved it, for example on another computer. If you overwrite it, your version replaces that change." => {
+            "Die Datei wurde seit dem Öffnen oder letzten Speichern von außen verändert, zum Beispiel auf einem anderen Rechner. Beim Überschreiben ersetzt deine Fassung diese Änderung."
+        }
+        "Saving under a new name keeps both versions, so you can compare them." => {
+            "Unter neuem Namen speichern behält beide Fassungen, dann kannst du sie vergleichen."
+        }
+        "AutoSave is paused for this workbook until you save it." => "AutoSpeichern pausiert für diese Mappe, bis du sie gespeichert hast.",
+        "Save Under a New Name…" => "Unter neuem Namen speichern…",
+        "Overwrite" => "Überschreiben",
+        "Cancel" => "Abbrechen",
         "Paste" => "Einfügen",
         "Paste Values" => "Werte einfügen",
         "Paste Formulas" => "Formeln einfügen",

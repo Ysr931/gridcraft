@@ -114,6 +114,10 @@ impl SheetApp {
             self.open_switch_windows = true;
             return;
         }
+        // Skripte rufen `run` auf und bekommen einen Fehler, hier fragt die App nach.
+        if id == "file.save" && self.save_needs_asking(&params) && self.settle_drafts().is_ok() {
+            return self.ask_file_changed();
+        }
         match self.run(id, params) {
             // A refused cell draft already shows its own message (with the rule's title).
             Err(e) if self.message.as_ref().is_some_and(|(_, m)| *m == e) => {}
@@ -322,7 +326,8 @@ impl SheetApp {
                 if let Some(pick) = &self.services.pick_save {
                     if let Some(path) = pick(&suggested) {
                         let path = if std::path::Path::new(&path).extension().is_none() { format!("{path}.xlsx") } else { path };
-                        self.run_or_alert("file.save", json!({"path": path}));
+                        // Der Dateidialog hat vor dem Ersetzen schon gefragt.
+                        self.run_or_alert("file.save", json!({"path": path, "overwrite": true}));
                     }
                 } else if self.services.download.is_some()
                     && let Ok(r) = self.run("file.saveBytes", json!({"format": "xlsx"}))

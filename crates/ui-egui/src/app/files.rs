@@ -111,6 +111,9 @@ impl SheetApp {
             self.ui.autosave && self.editor.is_none() && self.text_box_editor.is_none() && now - self.grid.last_autosave > 2000.0 && dirty_xlsx;
         if autosave_due {
             self.grid.last_autosave = now;
+            if self.autosave_stopped_by_changed_file() {
+                return;
+            }
             self.store_view_state();
             let _ = self.session.run("file.save", json!({}));
         } else if self.ui.autosave && dirty_xlsx {

@@ -284,6 +284,10 @@ pub struct SheetApp {
     /// Every unsaved workbook has been answered for quitting (or `app.quit` asked): the next
     /// window close goes through.
     pub allow_close: bool,
+    /// Die Mappe, für die AutoSave schon wegen einer von außen geänderten Datei gefragt hat.
+    pub file_changed_warned: Option<u64>,
+    /// Zum Wecken des Fensters für diese Nachfrage; `logic` hält ihn aktuell.
+    pub(crate) file_changed_ctx: Option<egui::Context>,
     /// View › Switch Windows opens its list on the next frame the View tab draws (asked for by a
     /// key tip, the command search or a menu, possibly while another tab was showing).
     pub(crate) open_switch_windows: bool,

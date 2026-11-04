@@ -14,6 +14,7 @@ use super::{
 mod clipboard;
 mod commands;
 mod editing;
+mod file_changed;
 mod files;
 mod fonts;
 mod input;
@@ -22,6 +23,8 @@ mod prefs;
 mod print;
 mod quit;
 mod view;
+
+pub(crate) use file_changed::file_changed_body;
 
 impl SheetApp {
     /// Constructs a `SheetApp` with default UI, grid, printing, control and screenshot state and the caller's session and services.
@@ -75,6 +78,8 @@ impl SheetApp {
             macros: macro_ui::MacroUi::default(),
             started: now_ms(),
             allow_close: false,
+            file_changed_warned: None,
+            file_changed_ctx: None,
             open_switch_windows: false,
             ui_window: None,
             parked: HashMap::new(),
@@ -102,6 +107,7 @@ impl SheetApp {
 
     /// Per-frame logic (control channel, screenshots). Call before `ui`.
     pub fn logic(&mut self, ctx: &egui::Context) {
+        self.file_changed_ctx = Some(ctx.clone());
         self.ensure_text_width(ctx);
         // A keytip control request lives one frame: the ribbon consumes it during `ui`, and
         // anything that never reached a control (collapsed ribbon, tab switch) is dropped.

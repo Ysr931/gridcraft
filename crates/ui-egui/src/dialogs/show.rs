@@ -327,6 +327,7 @@ pub fn show(app: &mut SheetApp, ctx: &egui::Context) {
                         }
                     });
                 }
+                "fileChanged" => crate::app::file_changed_body(app, ui, &d, &mut open),
                 "start" => {
                     ui.heading("Start a new workbook");
                     ui.horizontal_wrapped(|ui| {

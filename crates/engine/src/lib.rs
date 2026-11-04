@@ -12,6 +12,7 @@ mod chart_svg;
 mod clip_html;
 pub mod cmd;
 pub mod display;
+pub mod file_stamp;
 pub mod fill;
 pub mod io;
 pub mod links;
@@ -190,6 +191,8 @@ pub struct DocState {
     pub undo: Vec<HistoryEntry>,
     pub redo: Vec<HistoryEntry>,
     pub path: Option<String>,
+    /// Stand der Datei beim letzten Lesen oder Schreiben ([`file_stamp::FileStamp`]).
+    pub file_stamp: Option<file_stamp::FileStamp>,
     pub saved: Arc<Workbook>,
     pub revision: u64,
     /// Identifies this open workbook for the rest of the session: it never changes while the
@@ -315,6 +318,7 @@ impl DocState {
             undo: vec![],
             redo: vec![],
             path,
+            file_stamp: None,
             revision: 1,
             uid: NEXT_UID.fetch_add(1, std::sync::atomic::Ordering::Relaxed),
             title,
